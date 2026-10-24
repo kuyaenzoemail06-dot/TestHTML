@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mobile Legends: Bang Bang - Heroes & Items Hub</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Font (Inter & Orbitron for Gaming Vibe) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&family=Orbitron:wght@600;800;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        mlgold: '#e2b144',
+                        mldark: '#0b0e14',
+                        mlcard: '#151a24',
+                        mlaccent: '#2a82e4'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Orbitron', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Background styling using provided image source */
+        .bg-custom-source {
+            background-image: linear-gradient(to bottom, rgba(11, 14, 20, 0.75), rgba(11, 14, 20, 0.95)), url('input_file_0.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+
+        /* Glassmorphism Cards */
+        .glass-panel {
+            background: rgba(21, 26, 36, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 177, 68, 0.15);
+        }
+
+        .glass-panel-hover:hover {
+            border-color: rgba(226, 177, 68, 0.5);
+            box-shadow: 0 0 20px rgba(226, 177, 68, 0.2);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0b0e14;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2a3447;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #e2b144;
+        }
+    </style>
+</head>
+<body class="bg-mldark text-gray-200 font-sans min-h-screen bg-custom-source flex flex-col justify-between selection:bg-mlgold selection:text-mldark">
+
+    <!-- TOP HEADER WITH BURGER MENU IN UPPER LEFT SIDE -->
+    <header class="sticky top-0 z-40 bg-mldark/80 backdrop-blur-md border-b border-yellow-500/20 px-4 py-3 sm:px-8 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+            <!-- Burger Menu Button (Upper Left Side) -->
+            <button id="burgerBtn" onclick="toggleSidebar()" aria-label="Toggle Navigation Menu" class="p-2.5 text-mlgold hover:text-white rounded-lg bg-mlcard/80 hover:bg-yellow-500/20 border border-yellow-500/30 transition-all duration-300 focus:outline-none">
+                <i class="fa-solid fa-bars text-xl"></i>
+            </button>
+            <div class="flex items-center gap-2">
+                <i class="fa-solid fa-shield-halved text-mlgold text-2xl"></i>
+                <span class="font-display font-extrabold text-lg sm:text-xl text-white tracking-wider">MLBB <span class="text-mlgold">CODEX</span></span>
+            </div>
+        </div>
+
+        <div class="hidden sm:flex items-center gap-6 font-display text-sm tracking-wide">
+            <button onclick="showPage('home')" class="hover:text-mlgold transition-colors">HOME</button>
+            <button onclick="showPage('about')" class="hover:text-mlgold transition-colors">ABOUT</button>
+        </div>
+    </header>
+
+    <!-- SIDEBAR NAV OVERLAY -->
+    <div id="sidebarOverlay" onclick="toggleSidebar()" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 opacity-0 pointer-events-none transition-opacity duration-300"></div>
+
+    <!-- SIDEBAR DRAWER (Burgermenu Menu Content) -->
+    <aside id="sidebar" class="fixed top-0 left-0 h-full w-72 sm:w-80 bg-mldark/95 border-r border-yellow-500/30 z-50 -translate-x-full transition-transform duration-300 ease-in-out p-6 flex flex-col justify-between">
+        <div>
+            <!-- Sidebar Header -->
+            <div class="flex items-center justify-between border-b border-gray-800 pb-4 mb-8">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-gem text-mlgold text-xl"></i>
+                    <span class="font-display font-bold text-lg text-white">NAVIGATION</span>
+                </div>
+                <button onclick="toggleSidebar()" class="text-gray-400 hover:text-white p-2">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Burger Menu Options (2: Home & About) -->
+            <nav class="space-y-3 font-display">
+                <button onclick="showPage('home')" class="w-full text-left px-4 py-3.5 rounded-xl bg-gradient-to-r hover:from-yellow-500/20 hover:to-transparent text-gray-200 hover:text-mlgold border border-transparent hover:border-yellow-500/30 flex items-center gap-4 transition-all group">
+                    <i class="fa-solid fa-house text-mlgold text-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="font-semibold tracking-wide">HOME</span>
+                </button>
+
+                <button onclick="showPage('about')" class="w-full text-left px-4 py-3.5 rounded-xl bg-gradient-to-r hover:from-yellow-500/20 hover:to-transparent text-gray-200 hover:text-mlgold border border-transparent hover:border-yellow-500/30 flex items-center gap-4 transition-all group">
+                    <i class="fa-solid fa-circle-info text-mlgold text-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="font-semibold tracking-wide">ABOUT</span>
+                </button>
+            </nav>
+        </div>
+
+        <!-- Sidebar Footer -->
+        <div class="border-t border-gray-800 pt-4 text-xs text-gray-500 text-center">
+            <p>Mobile Legends: Bang Bang</p>
+            <p class="mt-1">Database & Info Companion</p>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="container mx-auto px-4 py-6 sm:py-10 flex-grow">
+
+        <!-- ================= HOME PAGE ================= -->
+        <section id="pageHome" class="space-y-12">
+
+            <!-- Hero Banner Section -->
+            <div class="glass-panel rounded-2xl p-6 sm:p-10 border border-yellow-500/30 relative overflow-hidden">
+                <div class="absolute -right-10 -bottom-10 opacity-10 text-mlgold text-9xl pointer-events-none">
+                    <i class="fa-solid fa-dragon"></i>
+                </div>
+                <div class="max-w-2xl space-y-4">
+                    <span class="inline-block px-3 py-1 rounded-full text-xs font-semibold bg-yellow-500/10 text-mlgold border border-yellow-500/30 font-display uppercase tracking-wider">
+                        Season Codex & Build Guide
+                    </span>
+                    <h1 class="font-display text-3xl sm:text-5xl font-black text-white leading-tight">
+                        DOMINATE THE <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-amber-600">LAND OF DAWN</span>
+                    </h1>
+                    <p class="text-gray-300 text-sm sm:text-base leading-relaxed">
+                        Explore comprehensive statistics, roles, and unique equipment items for Mobile Legends: Bang Bang heroes to optimize your battle tactics.
+                    </p>
+                </div>
+            </div>
+
+            <!-- TAB SWITCHER (HEROES vs ITEMS) -->
+            <div class="flex justify-center">
+                <div class="inline-flex p-1.5 rounded-2xl bg-mldark/80 border border-yellow-500/20 backdrop-blur-md">
+                    <button id="tabHeroesBtn" onclick="switchTab('heroes')" class="px-6 py-2.5 rounded-xl font-display text-sm font-bold transition-all duration-300 bg-gradient-to-r from-amber-500 to-yellow-600 text-mldark shadow-lg">
+                        <i class="fa-solid fa-mask-hero mr-2"></i>HEROES
+                    </button>
+                    <button id="tabItemsBtn" onclick="switchTab('items')" class="px-6 py-2.5 rounded-xl font-display text-sm font-bold transition-all duration-300 text-gray-400 hover:text-white">
+                        <i class="fa-solid fa-shield-halved mr-2"></i>EQUIPMENT ITEMS
+                    </button>
+                </div>
+            </div>
+
+            <!-- HEROES SECTION -->
+            <div id="heroesSection" class="space-y-6">
+                <!-- Role Filter Buttons -->
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3 justify-center text-xs sm:text-sm font-display">
+                    <button onclick="filterHeroes('All')" class="hero-filter-btn active-filter px-4 py-2 rounded-xl bg-mlcard border border-yellow-500/30 text-mlgold hover:border-yellow-500 transition-all">All Roles</button>
+                    <button onclick="filterHeroes('Fighter')" class="hero-filter-btn px-4 py-2 rounded-xl bg-mlcard border border-gray-800 text-gray-400 hover:text-white hover:border-yellow-500/30 transition-all">Fighter</button>
+                    <button onclick="filterHeroes('Assassin')" class="hero-filter-btn px-4 py-2 rounded-xl bg-mlcard border border-gray-800 text-gray-400 hover:text-white hover:border-yellow-500/30 transition-all">Assassin</button>
+                    <button onclick="filterHeroes('Mage')" class="hero-filter-btn px-4 py-2 rounded-xl bg-mlcard border border-gray-800 text-gray-400 hover:text-white hover:border-yellow-500/30 transition-all">Mage</button>
+                    <button onclick="filterHeroes('Marksman')" class="hero-filter-btn px-4 py-2 rounded-xl bg-mlcard border border-gray-800 text-gray-400 hover:text-white hover:border-yellow-500/30 transition-all">Marksman</button>
+                    <button onclick="filterHeroes('Tank')" class="hero-filter-btn px-4 py-2 rounded-xl bg-mlcard border border-gray-800 text-gray-400 hover:text-white hover:border-yellow-500/30 transition-all">Tank</button>
+                    <button onclick="filterHeroes('Support')" class="hero-filter-btn px-4 py-2 rounded-xl bg-mlcard border border-gray-800 text-gray-400 hover:text-white hover:border-yellow-500/30 transition-all">Support</button>
+                </div>
+
+                <!-- Heroes Grid -->
+                <div id="heroesGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+
+            <!-- ITEMS SECTION -->
+            <div id="itemsSection" class="space-y-6 hidden">
+                <!-- Item Category Filters -->
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3 justify-center text-xs sm:text-sm font-display">
+                    <button onclick="filterItems('All')" class="item-filter-btn active-item-filter px-4 py-2 rounded-xl bg-mlcard border border-yellow-500/30 text-mlgold hover:border-yellow-500 transition-all">All Categories</button>
+                    <button onclick="filterItems('Attack')" class="item-filter-btn px-4 py-2 rounded-xl bg-mlcard border border-gray-800 text-gray-400 hover:text-white hover:border-yellow-500/30 transition-all">Physical Attack</button>
+                    <button onclick="filterItems('Magic')" class="item-filter-btn px-4 py-2 rounded-xl bg-mlcard border border-gray-800 text-gray-400 hover:text-white hover:border-yellow-500/30 transition-all">Magic</button>
+                    <button onclick="filterItems('Defense')" class="item-filter-btn px-4 py-2 rounded-xl bg-mlcard border border-gray-800 text-gray-400 hover:text-white hover:border-yellow-500/30 transition-all">Defense</button>
+                    <button onclick="filterItems('Movement')" class="item-filter-btn px-4 py-2 rounded-xl bg-mlcard border border-gray-800 text-gray-400 hover:text-white hover:border-yellow-500/30 transition-all">Movement</button>
+                </div>
+
+                <!-- Items Grid -->
+                <div id="itemsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    <!-- Populated dynamically via JS -->
+                </div>
+            </div>
+
+        </section>
+
+        <!-- ================= ABOUT PAGE ================= -->
+        <section id="pageAbout" class="space-y-8 hidden">
+            <div class="max-w-4xl mx-auto glass-panel rounded-2xl p-6 sm:p-10 border border-yellow-500/30 space-y-8">
+                
+                <div class="border-b border-gray-800 pb-6 flex items-center gap-4">
+                    <div class="p-4 rounded-2xl bg-yellow-500/10 border border-yellow-500/30 text-mlgold">
+                        <i class="fa-solid fa-circle-info text-3xl"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-display text-2xl sm:text-3xl font-bold text-white">About MLBB Codex Hub</h2>
+                        <p class="text-xs sm:text-sm text-gray-400">Mobile Legends: Bang Bang Hero & Equipment Companion</p>
+                    </div>
+                </div>
+
+                <div class="space-y-6 text-gray-300 text-sm sm:text-base leading-relaxed">
+                    <p>
+                        Welcome to the ultimate Mobile Legends: Bang Bang knowledge base. Designed specifically for competitive mobile players seeking swift access to hero abilities, roles, specialty passive stats, and build item attributes.
+                    </p>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-6">
+                        <div class="p-5 rounded-xl bg-mldark/60 border border-gray-800 space-y-2">
+                            <i class="fa-solid fa-bolt text-mlgold text-xl"></i>
+                            <h3 class="font-display font-bold text-white">Comprehensive Stats</h3>
+                            <p class="text-xs text-gray-400">Detailed stats on durability, offense, and difficulty to aid draft picking.</p>
+                        </div>
+                        <div class="p-5 rounded-xl bg-mldark/60 border border-gray-800 space-y-2">
+                            <i class="fa-solid fa-shield-cat text-mlgold text-xl"></i>
+                            <h3 class="font-display font-bold text-white">Item Synergies</h3>
+                            <p class="text-xs text-gray-400">Deep-dive item passives and unique attribute boosters to counter opponents.</p>
+                        </div>
+                    </div>
+
+                    <h3 class="font-display text-lg font-bold text-mlgold pt-2">Background & Theme</h3>
+                    <p>
+                        This portal integrates styled custom artwork and clean visual layers, creating an immersive Esports dark-fantasy aesthetic optimized for all mobile screens and desktop browsers.
+                    </p>
+                </div>
+
+                <div class="pt-6 border-t border-gray-800 flex justify-between items-center text-xs text-gray-500">
+                    <span>Version 1.0.0</span>
+                    <button onclick="showPage('home')" class="text-mlgold hover:underline font-display font-semibold">
+                        Back to Home <i class="fa-solid fa-arrow-right ml-1"></i>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- DETAIL MODAL -->
+    <div id="detailModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div class="glass-panel w-full max-w-lg rounded-2xl p-6 sm:p-8 border border-yellow-500/40 relative transform scale-95 transition-transform duration-300 max-h-[90vh] overflow-y-auto" id="modalContainer">
+            <button onclick="closeModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white p-2 text-xl">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div id="modalContent">
+                <!-- Injected via JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-mldark/90 border-t border-gray-800/80 py-6 text-center text-xs text-gray-500 font-sans">
+        <div class="container mx-auto px-4 space-y-2">
+            <p>&copy; 2026 MLBB Codex Companion. Unofficial Fan & Strategy Guide.</p>
+            <p class="text-gray-600">Mobile Legends: Bang Bang is a registered trademark of Moonton.</p>
+        </div>
+    </footer>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Data Store: Heroes
+        const heroesData = [
+            {
+                id: 'chou',
+                name: 'Chou',
+                role: 'Fighter',
+                specialty: 'Control / Initiator',
+                lane: 'Exp Lane / Roam',
+                icon: 'fa-user-ninja',
+                durability: 80,
+                offense: 75,
+                difficulty: 85,
+                description: 'A martial artist who can knock back enemies and deliver fatal combinations with supreme mobility.',
+                passive: 'Only Fast: Every 8 yards moved, Chou deals 180% damage with his next basic attack and slows targets.'
+            },
+            {
+                id: 'gusion',
+                name: 'Gusion',
+                role: 'Assassin',
+                specialty: 'Burst / Magic',
+                lane: 'Jungle',
+                icon: 'fa-wand-magic-sparkles',
+                durability: 40,
+                offense: 95,
+                difficulty: 90,
+                description: 'A high-speed dagger master who throws blades and blinks to eliminate squishy targets instantly.',
+                passive: 'Dagger Specialist: Each skill cast adds a rune to Gusion\'s dagger. Upon 3 stacks, next attack deals extra damage.'
+            },
+            {
+                id: 'kagura',
+                name: 'Kagura',
+                role: 'Mage',
+                specialty: 'Poke / Reap',
+                lane: 'Mid Lane',
+                icon: 'fa-umbrella',
+                durability: 45,
+                offense: 88,
+                difficulty: 80,
+                description: 'Master of the Seimei Umbrella capable of long-range displacement, crowd control, and fatal bursts.',
+                passive: 'Yin Yang Gather: When Seimei Umbrella returns to Kagura, she gains a shield and stuns nearby enemies.'
+            },
+            {
+                id: 'beatrix',
+                name: 'Beatrix',
+                role: 'Marksman',
+                specialty: 'Reap / Damage',
+                lane: 'Gold Lane',
+                icon: 'fa-crosshair',
+                durability: 35,
+                offense: 92,
+                difficulty: 75,
+                description: 'A weapon genius who switches between 4 unique firearms (Renner, Bennett, Wesker, Nibiru) for varied combat styles.',
+                passive: 'Mechanical Genius: Beatrix can carry 2 weapons at a time, providing distinct basic attacks and ultimate skills.'
+            },
+            {
+                id: 'tigreal',
+                name: 'Tigreal',
+                role: 'Tank',
+                specialty: 'Crowd Control',
+                lane: 'Roam',
+                icon: 'fa-shield',
+                durability: 95,
+                offense: 40,
+                difficulty: 50,
+                description: 'Leader of the Moniyan Knights, specialized in clustering enemies together and locking them down with heavy CC.',
+                passive: 'Fearless: Gains a layer of blessing when using skills or getting hit by basic attacks. Blocks next basic attack at full stacks.'
+            },
+            {
+                id: 'angela',
+                name: 'Angela',
+                role: 'Support',
+                specialty: 'Guard / Support',
+                lane: 'Roam',
+                icon: 'fa-heart-pulse',
+                durability: 50,
+                offense: 50,
+                difficulty: 40,
+                description: 'A mechanical doll that attaches to allies across the entire map, granting huge shields and healing in teamfights.',
+                passive: 'Smart Heart: Each time Angela uses a skill, her movement speed increases by 15% and boosts attached ally speed.'
+            }
+        ];
+
+        // Data Store: Items
+        const itemsData = [
+            {
+                id: 'blade-of-despair',
+                name: 'Blade of Despair',
+                category: 'Attack',
+                cost: '3010 Gold',
+                icon: 'fa-spaghetti-monster-flying',
+                stats: '+160 Physical Attack, +5% Movement Speed',
+                passive: 'Despair: Attacking enemy units with HP below 50% increases Physical Attack by 25% for 2s.'
+            },
+            {
+                id: 'holy-crystal',
+                name: 'Holy Crystal',
+                category: 'Magic',
+                cost: '2180 Gold',
+                icon: 'fa-gem',
+                stats: '+100 Magic Power',
+                passive: 'Mystery: Increases Magic Attack by 21%-35% (scaling with hero level).'
+            },
+            {
+                id: 'immortality',
+                name: 'Immortality',
+                category: 'Defense',
+                cost: '2120 Gold',
+                icon: 'fa-ankh',
+                stats: '+800 HP, +20 Physical Defense',
+                passive: 'Immortal: Resurrects 2.5s after death with 16% HP and a 220-1200 point shield.'
+            },
+            {
+                id: 'demon-hunter-sword',
+                name: 'Demon Hunter Sword',
+                category: 'Attack',
+                cost: '2180 Gold',
+                icon: 'fa-khanda',
+                stats: '+35 Physical Attack, +25% Attack Speed',
+                passive: 'Devour: Basic attacks deal 8% of target\'s current HP as extra physical damage. Grants lifesteal on hit.'
+            },
+            {
+                id: 'blood-wings',
+                name: 'Blood Wings',
+                category: 'Magic',
+                cost: '3000 Gold',
+                icon: 'fa-feather-pointed',
+                stats: '+175 Magic Power, +500 HP',
+                passive: 'Guard: Gain a shield equal to 200% Magic Power. Shield restores 20s after taking damage.'
+            },
+            {
+                id: 'warrior-boots',
+                name: 'Warrior Boots',
+                category: 'Movement',
+                cost: '720 Gold',
+                icon: 'fa-shoe-prints',
+                stats: '+40 Movement Speed, +22 Physical Defense',
+                passive: 'Valor: Physical defense increases by 5 each time a basic attack is received (up to +25).'
+            }
+        ];
+
+        // Render Hero Cards
+        function renderHeroes(data) {
+            const container = document.getElementById('heroesGrid');
+            container.innerHTML = '';
+
+            data.forEach(hero => {
+                const card = document.createElement('div');
+                card.className = 'glass-panel glass-panel-hover rounded-2xl p-5 border border-yellow-500/20 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 cursor-pointer';
+                card.onclick = () => openHeroModal(hero.id);
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-display font-semibold bg-yellow-500/10 text-mlgold border border-yellow-500/30">
+                                ${hero.role}
+                            </span>
+                            <span class="text-xs text-gray-400 font-display">${hero.lane}</span>
+                        </div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-yellow-500/20 to-amber-600/30 border border-yellow-500/40 flex items-center justify-center text-mlgold text-xl">
+                                <i class="fa-solid ${hero.icon}"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-display font-bold text-lg text-white">${hero.name}</h3>
+                                <p class="text-xs text-gray-400">${hero.specialty}</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-300 line-clamp-2 mb-4 leading-relaxed">${hero.description}</p>
+                    </div>
+                    <div class="pt-3 border-t border-gray-800 flex items-center justify-between text-xs text-mlgold font-display font-semibold">
+                        <span>View Details</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Render Item Cards
+        function renderItems(data) {
+            const container = document.getElementById('itemsGrid');
+            container.innerHTML = '';
+
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'glass-panel glass-panel-hover rounded-2xl p-5 border border-yellow-500/20 flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 cursor-pointer';
+                card.onclick = () => openItemModal(item.id);
+
+                card.innerHTML = `
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-display font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/30">
+                                ${item.category}
+                            </span>
+                            <span class="text-xs text-mlgold font-display font-bold">${item.cost}</span>
+                        </div>
+                        <div class="flex items-center gap-3 mb-3">
+                            <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500/20 to-indigo-600/30 border border-blue-500/40 flex items-center justify-center text-blue-400 text-xl">
+                                <i class="fa-solid ${item.icon}"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-display font-bold text-lg text-white">${item.name}</h3>
+                                <p class="text-xs text-gray-400 font-semibold">${item.stats}</p>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-300 line-clamp-2 mb-4 leading-relaxed">${item.passive}</p>
+                    </div>
+                    <div class="pt-3 border-t border-gray-800 flex items-center justify-between text-xs text-blue-400 font-display font-semibold">
+                        <span>Equipment Stats</span>
+                        <i class="fa-solid fa-chevron-right"></i>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Sidebar Menu Toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebarOverlay');
+            
+            const isOpen = !sidebar.classList.contains('-translate-x-full');
+            if (isOpen) {
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+            } else {
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('opacity-0', 'pointer-events-none');
+            }
+        }
+
+        // Switch Main Pages (Home / About)
+        function showPage(page) {
+            const pageHome = document.getElementById('pageHome');
+            const pageAbout = document.getElementById('pageAbout');
+
+            if (page === 'home') {
+                pageHome.classList.remove('hidden');
+                pageAbout.classList.add('hidden');
+            } else if (page === 'about') {
+                pageAbout.classList.remove('hidden');
+                pageHome.classList.add('hidden');
+            }
+
+            // Close sidebar if open
+            const sidebar = document.getElementById('sidebar');
+            if (!sidebar.classList.contains('-translate-x-full')) {
+                toggleSidebar();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Switch Sub-Tabs (Heroes / Equipment Items)
+        function switchTab(tab) {
+            const heroesSection = document.getElementById('heroesSection');
+            const itemsSection = document.getElementById('itemsSection');
+            const tabHeroesBtn = document.getElementById('tabHeroesBtn');
+            const tabItemsBtn = document.getElementById('tabItemsBtn');
+
+            if (tab === 'heroes') {
+                heroesSection.classList.remove('hidden');
+                itemsSection.classList.add('hidden');
+                tabHeroesBtn.className = "px-6 py-2.5 rounded-xl font-display text-sm font-bold transition-all duration-300 bg-gradient-to-r from-amber-500 to-yellow-600 text-mldark shadow-lg";
+                tabItemsBtn.className = "px-6 py-2.5 rounded-xl font-display text-sm font-bold transition-all duration-300 text-gray-400 hover:text-white";
+            } else {
+                itemsSection.classList.remove('hidden');
+                heroesSection.classList.add('hidden');
+                tabItemsBtn.className = "px-6 py-2.5 rounded-xl font-display text-sm font-bold transition-all duration-300 bg-gradient-to-r from-amber-500 to-yellow-600 text-mldark shadow-lg";
+                tabHeroesBtn.className = "px-6 py-2.5 rounded-xl font-display text-sm font-bold transition-all duration-300 text-gray-400 hover:text-white";
+            }
+        }
+
+        // Filter Heroes
+        function filterHeroes(role) {
+            // Update filter button visuals
+            document.querySelectorAll('.hero-filter-btn').forEach(btn => {
+                if (btn.innerText.includes(role) || (role === 'All' && btn.innerText.includes('All'))) {
+                    btn.className = 'hero-filter-btn active-filter px-4 py-2 rounded-xl bg-mlcard border border-yellow-500/30 text-mlgold hover:border-yellow-500 transition-all';
+                } else {
+                    btn.className = 'hero-filter-btn px-4 py-2 rounded-xl bg-mlcard border border-gray-800 text-gray-400 hover:text-white hover:border-yellow-500/30 transition-all';
+                }
+            });
+
+            if (role === 'All') {
+                renderHeroes(heroesData);
+            } else {
+                const filtered = heroesData.filter(h => h.role === role);
+                renderHeroes(filtered);
+            }
+        }
+
+        // Filter Items
+        function filterItems(category) {
+            // Update filter button visuals
+            document.querySelectorAll('.item-filter-btn').forEach(btn => {
+                if (btn.innerText.includes(category) || (category === 'All' && btn.innerText.includes('All'))) {
+                    btn.className = 'item-filter-btn active-item-filter px-4 py-2 rounded-xl bg-mlcard border border-yellow-500/30 text-mlgold hover:border-yellow-500 transition-all';
+                } else {
+                    btn.className = 'item-filter-btn px-4 py-2 rounded-xl bg-mlcard border border-gray-800 text-gray-400 hover:text-white hover:border-yellow-500/30 transition-all';
+                }
+            });
+
+            if (category === 'All') {
+                renderItems(itemsData);
+            } else {
+                const filtered = itemsData.filter(i => i.category === category);
+                renderItems(filtered);
+            }
+        }
+
+        // Modal Handlers
+        function openHeroModal(heroId) {
+            const hero = heroesData.find(h => h.id === heroId);
+            if (!hero) return;
+
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-yellow-500/20 to-amber-600/30 border border-yellow-500/40 flex items-center justify-center text-mlgold text-3xl">
+                            <i class="fa-solid ${hero.icon}"></i>
+                        </div>
+                        <div>
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-display font-semibold bg-yellow-500/10 text-mlgold border border-yellow-500/30">
+                                ${hero.role}
+                            </span>
+                            <h2 class="font-display font-bold text-2xl text-white mt-1">${hero.name}</h2>
+                            <p class="text-xs text-gray-400">${hero.lane} • ${hero.specialty}</p>
+                        </div>
+                    </div>
+
+                    <p class="text-sm text-gray-300 leading-relaxed">${hero.description}</p>
+
+                    <!-- Stats Bars -->
+                    <div class="space-y-3 font-display text-xs">
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-gray-400">Durability</span>
+                                <span class="text-mlgold">${hero.durability}%</span>
+                            </div>
+                            <div class="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-amber-500 rounded-full" style="width: ${hero.durability}%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-gray-400">Offense Damage</span>
+                                <span class="text-mlgold">${hero.offense}%</span>
+                            </div>
+                            <div class="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-red-500 rounded-full" style="width: ${hero.offense}%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="flex justify-between mb-1">
+                                <span class="text-gray-400">Difficulty</span>
+                                <span class="text-mlgold">${hero.difficulty}%</span>
+                            </div>
+                            <div class="w-full h-2 bg-gray-800 rounded-full overflow-hidden">
+                                <div class="h-full bg-blue-500 rounded-full" style="width: ${hero.difficulty}%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-mldark/80 border border-yellow-500/20 space-y-1">
+                        <span class="text-xs font-display font-bold text-mlgold uppercase tracking-wide">Unique Passive Ability</span>
+                        <p class="text-xs text-gray-300 leading-relaxed">${hero.passive}</p>
+                    </div>
+                </div>
+            `;
+            showModal();
+        }
+
+        function openItemModal(itemId) {
+            const item = itemsData.find(i => i.id === itemId);
+            if (!item) return;
+
+            const modalContent = document.getElementById('modalContent');
+            modalContent.innerHTML = `
+                <div class="space-y-6">
+                    <div class="flex items-center gap-4">
+                        <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500/20 to-indigo-600/30 border border-blue-500/40 flex items-center justify-center text-blue-400 text-3xl">
+                            <i class="fa-solid ${item.icon}"></i>
+                        </div>
+                        <div>
+                            <span class="px-2.5 py-0.5 rounded-full text-xs font-display font-semibold bg-blue-500/10 text-blue-400 border border-blue-500/30">
+                                ${item.category}
+                            </span>
+                            <h2 class="font-display font-bold text-2xl text-white mt-1">${item.name}</h2>
+                            <p class="text-xs text-mlgold font-display font-bold">${item.cost}</p>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-mldark/80 border border-blue-500/20 space-y-2">
+                        <span class="text-xs font-display font-bold text-blue-400 uppercase tracking-wide">Attributes</span>
+                        <p class="text-sm font-semibold text-white">${item.stats}</p>
+                    </div>
+
+                    <div class="p-4 rounded-xl bg-mldark/80 border border-gray-800 space-y-2">
+                        <span class="text-xs font-display font-bold text-mlgold uppercase tracking-wide">Passive Effect</span>
+                        <p class="text-xs text-gray-300 leading-relaxed">${item.passive}</p>
+                    </div>
+                </div>
+            `;
+            showModal();
+        }
+
+        function showModal() {
+            const modal = document.getElementById('detailModal');
+            const container = document.getElementById('modalContainer');
+            modal.classList.remove('opacity-0', 'pointer-events-none');
+            container.classList.remove('scale-95');
+            container.classList.add('scale-100');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('detailModal');
+            const container = document.getElementById('modalContainer');
+            modal.classList.add('opacity-0', 'pointer-events-none');
+            container.classList.remove('scale-100');
+            container.classList.add('scale-95');
+        }
+
+        // Initialize Page
+        window.onload = function() {
+            renderHeroes(heroesData);
+            renderItems(itemsData);
+        };
+    </script>
+</body>
+</html>
